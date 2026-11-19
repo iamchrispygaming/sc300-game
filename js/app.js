@@ -93,7 +93,7 @@ const meterLabel = (m, k) => (m && m.meterLabels && m.meterLabels[k]) || METER_K
 function defaultState(){
   return { schema:SCHEMA, appVersion:C.meta.version, createdAt:new Date().toISOString(), xp:0,
     profile:{ examDate:"", experience:"Not set (beginner defaults)", studyTime:"", sessionLength:"10–15 minutes", showStory:true, showClock:false, difficultyMode:"adaptive" },
-    topics:{}, adaptLog:[], evidence:[], misconceptions:{}, reviews:{}, results:[], completed:{}, runs:{}, view:{ screen:"ops" }, session:null, lab:{ seen:{}, missions:{}, run:null, introduced:true },
+    topics:{}, adaptLog:[], evidence:[], misconceptions:{}, reviews:{}, results:[], completed:{}, runs:{}, view:{ screen:"hub" }, session:null, lab:{ seen:{}, missions:{}, run:null, introduced:true, inbox:[] },
     achievements:{}, days:[], stats:{ corrections:0, certainCorrect:0, reviews:0, exams:0 }, exams:[] };
 }
 function migrate(d){
@@ -129,10 +129,10 @@ function migrate(d){
   if (!out.topics || typeof out.topics !== "object") out.topics = rebuildTopics(out.evidence);
   if (out.session) out.session.meta = out.session.meta || {};
   if (!out.lab || typeof out.lab !== "object" || !out.lab.missions) out.lab = { seen:{}, missions:{}, run:null };
-  if (!d.lab || !d.lab.introduced){ out.lab = Object.assign({}, out.lab, { introduced:true }); if (!out.view || out.view.screen === "hub") out.view = { screen:"ops" }; }
-  if (out.lab.run && (!window.ID_LAB || !window.ID_LAB.missions[out.lab.run.mission] || !out.lab.run.policies)) out.lab.run = null;
-  if (out.lab.run){ out.lab.run.animating = false; }
-  if (!out.view || !["ops","hub","mission","session"].includes(out.view.screen)) out.view = { screen:"ops" };
+  out.lab = Object.assign({}, out.lab, { introduced:true });
+  if (out.view && out.view.screen === "ops") out.view = { screen:"hub" };
+  out.lab.run = null;   // the old Ops workspace is retired; the game keeps its own state in lab.game
+  if (!out.view || !["hub","mission","session"].includes(out.view.screen)) out.view = { screen:"hub" };
   if (out.view.screen === "mission" && !out.runs[out.view.missionId]) out.view = { screen:"hub" };
   if (out.session && (!Array.isArray(out.session.queue) || out.session.queue.some(id => !ITEMS[id]))) out.session = null;
   if (out.view.screen === "session" && !out.session) out.view = { screen:"hub" };
@@ -501,7 +501,7 @@ function moveStep(t){
 
 /* ---------- Actions: navigation ---------- */
 function openHub(){ S.view = { screen:"hub" }; save(); renderAll(); focusTitle(); }
-function openOps(){ S.view = { screen:"ops" }; markDay(); save(); renderAll(); focusTitle(); }
+function openOps(){ location.href = "index.html"; }
 function openMission(mid, fresh){
   if (!MISSIONS[mid]) return;
   const r = S.runs[mid];
@@ -751,7 +751,7 @@ function renderHub(){
   const rec = recommended();
   let html = `<div class="eyebrow"><span>Halcyon Freight · Identity operations</span><span class="kind">${esc(C.meta.studyGuide)}</span></div>
     <h2 id="case-title" tabindex="-1">Study library</h2>
-    <div class="opslink"><div><div class="n">OPS WORKSPACE</div><h3>Monday Morning Lockout</h3><p>Hands-on Conditional Access troubleshooting. More missions are being converted; their study versions are below.</p></div><button class="btn primary" data-action="nav-ops">Open workspace →</button></div>
+    <div class="opslink"><div><div class="n">THE GAME</div><h3>Identity Defender: the campaign</h3><p>Five hands-on missions across the Halcyon campus, one for each exam area. The study missions below cover every objective.</p></div><a class="btn primary" href="index.html">▶ Play →</a></div>
     <div class="tiles">
       <div class="tile"><div class="tv">${touched.size}<small>/${OBJ_LIST.length}</small></div><div class="tl">Objectives touched</div></div>
       <div class="tile"><div class="tv">${demo}</div><div class="tl">Demonstrated</div></div>
@@ -1043,7 +1043,6 @@ function renderCase(){
   const el = $("#case");
   document.querySelector("main.app").classList.toggle("wide", S.view.screen === "ops");
   el.classList.toggle("opsview", S.view.screen === "ops");
-  if (S.view.screen === "ops"){ window.IDLab.render(el); return; }
   if (S.view.screen === "hub") el.innerHTML = renderHub();
   else if (S.view.screen === "mission"){ const s = curStep(); el.innerHTML = s.type === "brief" ? renderBrief() : s.type === "debrief" ? renderDebrief() : renderMissionItem(s); }
   else if (S.view.screen === "session") el.innerHTML = S.session.finished ? renderSessionSummary() : renderSessionItem();
@@ -1113,7 +1112,7 @@ function checkpointText(){
     "XP "+p.totals.xp+" (Lv "+p.totals.level+") | Days studied: "+p.totals.daysStudied+" | Missions completed ("+done.length+"/"+MISSION_ORDER.length+"): "+(done.join(", ") || "none"),
     "Coverage: "+Object.entries(cov).map(([d,c]) => d.replace(/^(Implement and manage |Implement |Plan and implement |Plan and automate )/,"")+" "+(c.Learning+c["Needs review"]+c.Demonstrated)+"/"+(c["Not started"]+c.Learning+c["Needs review"]+c.Demonstrated)+" touched, "+c.Demonstrated+" demonstrated").join("; "),
     "Difficulty: "+(p.difficultyMode === "adaptive" ? "Adaptive" : "Fixed "+LEVEL_NAMES[+p.difficultyMode])+" | Topic levels: "+p.topicLevels.filter(t => t.level !== "Not started").map(t => t.topic+" "+t.level[0]+(t.guided?"(guided)":"")).join(", "),
-    "Ops workspace: "+Object.entries((S.lab && S.lab.missions) || {}).map(([k,m]) => k.toUpperCase()+" solved "+m.completed+"x, best level "+(["none","Guided","Standard","Advanced"][m.best || 0])).join("; ") + (Object.keys((S.lab && S.lab.missions) || {}).length ? "" : "not started"),
+    "Game missions: "+(window.ID_LEVELS ? window.ID_LEVELS.order.map(id => { const g = S.lab && S.lab.game && S.lab.game.levels && S.lab.game.levels[id]; return window.ID_LEVELS.defs[id].title+" "+(g && g.completed ? "✓ best "+(["","Guided","Standard","Advanced"][g.best || 1]) : "–"); }).join("; ") : "n/a"),
     "Recommended practice: "+p.recommendedPractice.join("; "),
     "Learning: "+(p.learning.map(short).join(", ") || "none"),
     "Needs review: "+(p.weakAreas.map(short).join(", ") || "none"),
@@ -1248,8 +1247,20 @@ document.addEventListener("change", e => {
 });
 
 /* ---------- Boot ---------- */
+/* Learning evidence queued by the game (index.html) is applied here, where the mastery and adaptation rules live. */
+function processInbox(){
+  const box = S.lab && Array.isArray(S.lab.inbox) ? S.lab.inbox : [];
+  if (!box.length) return;
+  box.forEach(ev => {
+    const item = ITEMS[ev.item]; if (!item) return;
+    if (ev.type === "evidence") recordEvidence(ev.item, !!ev.correct, ev.hints || 0, ev.conf || null, "game");
+    else if (ev.type === "adapt" && !topicState(item.topic).history.some(h => h.item === ev.item)) adaptRecord(ev.item, !!ev.correct, ev.hints || 0, ev.conf || null, "game", true);
+  });
+  S.lab.inbox = [];
+}
 function start(data){
   S = (data && (data.schema === SCHEMA || data.schema === 1)) ? (migrate(data) || load() || defaultState()) : (load() || defaultState());
+  processInbox();
   save(); renderAll();
   try { window.claude?.hot?.snapshot(() => S); } catch(e){}
 }

@@ -6,7 +6,7 @@ Identity Defender serves every asset from this repository. Nothing is hotlinked.
 
 | Asset | Creator | Official source | License | Files in this repo | Changes |
 |---|---|---|---|---|---|
-| **RPG Urban Pack 1.0** (16×16 campus tiles, animated characters, props, vehicles) | Kenney (www.kenney.nl) | https://kenney.nl/assets/rpg-urban-pack | CC0 1.0 (public domain dedication) | `assets/kenney-rpg-urban/tilemap_packed.png`, `assets/kenney-rpg-urban/License.txt` | The file is unchanged. At runtime the game scales it ×2–×4 (nearest neighbour), applies a cool evening tint to the map, and colour-tints a few characters to tell them apart. |
+| **RPG Urban Pack 1.0** (16×16 tiles for all five areas: grass, plazas, water, roads, parking, buildings; animated characters; props and vehicles) | Kenney (www.kenney.nl) | https://kenney.nl/assets/rpg-urban-pack | CC0 1.0 (public domain dedication) | `assets/kenney-rpg-urban/tilemap_packed.png`, `assets/kenney-rpg-urban/License.txt` | The file is unchanged. At runtime the game scales it ×2–×4 (nearest neighbour), applies a different light tint per area (morning, dusk, midday, night, sunset), and colour-tints some characters to tell them apart. |
 | **Game Icons** (29 white UI icons) | Kenney (www.kenney.nl) | https://kenney.nl/assets/game-icons | CC0 1.0, per the bundled `License.txt` | `assets/kenney-game-icons/*.png`, `assets/kenney-game-icons/License.txt` | None. They're displayed at 15 px in the interface. |
 | **Kenney Fonts**: Kenney Pixel, Kenney Future | Kenney (www.kenney.nl) | https://kenney.nl/assets/kenney-fonts | CC0 1.0, per the bundled `License.txt` | `assets/kenney-fonts/KenneyPixel.ttf`, `assets/kenney-fonts/KenneyFuture.ttf`, `assets/kenney-fonts/License.txt` | None. |
 | **Phaser 3.90.0** (game engine) | Richard Davey, Phaser Studio Inc. | https://www.npmjs.com/package/phaser | MIT | `vendor/phaser.min.js`, `vendor/PHASER-LICENSE.md` | None. |
@@ -27,12 +27,13 @@ SHA-256 of the files as downloaded:
 
 The following were drawn for Identity Defender (by script, pixel by pixel) to match the RPG Urban Pack's palette and 16 px grid. They don't come from any third-party source.
 
-- `assets/original/gate.png`: the access gate, with four states (idle, scanning, open, denied)
+- `assets/original/gate.png`: the security door/gate, with four states (idle, scanning, open, denied)
 - `assets/original/console.png`: the security console
 - `assets/original/rack.png`: the server racks
-- `assets/original/drone.png`: the IMAP "mail script" drone
-- `assets/original/sign_*.png`: the neon app signs
-- `assets/original/bubbles.png`, `lamp.png`, `chevron.png`: status bubbles and lights
+- `assets/original/drone.png`: the IMAP "mail script" drone and the phishing app
+- `assets/original/drone_app.png`: the third-party app drones (tinted per app at runtime)
+- `assets/original/sign_*.png`: the neon building signs (mail, doc, chat, badge, server, vault, app, cloud)
+- `assets/original/bubbles.png`, `lamp.png`, `chevron.png`: status bubbles (ok, no, MFA, question, clock, envelope) and lights
 
 The game also generates a few effects in code at runtime: the glow, spark, marker and data-packet textures.
 

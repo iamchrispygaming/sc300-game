@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache">
-<title>Identity Defender · Restore the Access Gates</title>
+<title>Identity Defender</title>
 <meta name="description" content="A 2D top-down puzzle game for learning Microsoft SC-300 Conditional Access.">
 <style>
-@font-face{font-family:"Kenney Pixel";src:url("assets/kenney-fonts/KenneyPixel.ttf?v=3.0.0") format("truetype");font-display:swap}
-@font-face{font-family:"Kenney Future";src:url("assets/kenney-fonts/KenneyFuture.ttf?v=3.0.0") format("truetype");font-display:swap}
+@font-face{font-family:"Kenney Pixel";src:url("assets/kenney-fonts/KenneyPixel.ttf?v=3.1.0") format("truetype");font-display:swap}
+@font-face{font-family:"Kenney Future";src:url("assets/kenney-fonts/KenneyFuture.ttf?v=3.1.0") format("truetype");font-display:swap}
 :root{--ink:#e8ecfa;--muted:#a7b0cf;--panel:#1a2035;--panel2:#232a45;--line:#3b4366;--cy:#64e0f0;--gr:#42dfab;--rd:#ff6b6b;--am:#f5c84c;--px:"Kenney Pixel",ui-monospace,monospace;--fut:"Kenney Future","Segoe UI",system-ui,sans-serif;--body:system-ui,"Segoe UI",Roboto,sans-serif}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:#151a2a;color:var(--ink);font:15px/1.45 var(--body);overflow:hidden;overscroll-behavior:none}
@@ -153,6 +153,49 @@ details.more,#panel details{margin-top:8px;font-size:14px}#panel summary{cursor:
 #loading .bar{width:220px;height:8px;border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:0 auto}#loadbar{display:block;height:100%;width:0;background:var(--am)}
 @media (max-width:560px){#hud-tr{left:10px;right:10px;justify-content:flex-end}#hud-tl{top:calc(56px + env(safe-area-inset-top));width:calc(100vw - 20px)}#toasts{top:150px!important}}
 @media (max-width:700px){#hud-tl:not([open]) .obj{font-size:13px}#hud-xp{display:none}#coach{bottom:calc(206px + env(safe-area-inset-bottom));font-size:13.5px}#toasts{top:110px}}
+
+/* ===== v3.1 retro RPG skin ===== */
+:root{--win:#10162a;--win2:#1a2340;--edge:#e8ecfa;--edge2:#3a4a7a}
+.hud,#panel,#predict,#coach,.bn-in{border-radius:6px!important;border:3px solid var(--edge2)!important;box-shadow:0 0 0 2px #05070f,inset 0 0 0 2px #26305a,0 10px 30px rgba(0,0,0,.45)!important;background:var(--win)!important}
+#coach{text-align:left;font-size:15px;padding:10px 16px 10px 40px;min-width:min(520px,calc(100vw - 24px))}
+#coach::before{content:"▶";position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--am);font-size:12px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#panel h2,.obj-k,#hud-code{font-family:var(--fut)}
+.obj-k{display:flex;gap:6px;align-items:center}
+#hud-code{font-size:10px;letter-spacing:.14em;color:var(--am)}
+#areasign{position:absolute;left:50%;top:max(14px,env(safe-area-inset-top));transform:translate(-50%,-160%);transition:transform .45s cubic-bezier(.2,1.3,.4,1);background:var(--win);border:3px solid var(--edge2);box-shadow:0 0 0 2px #05070f,inset 0 0 0 2px #26305a;border-radius:6px;padding:8px 22px;text-align:center;pointer-events:none;z-index:6}
+#areasign.show{transform:translate(-50%,0)}
+#areasign b{display:block;font:20px var(--fut);letter-spacing:.2em;color:var(--ink)}#areasign span{font:15px var(--px);color:var(--am)}
+#timeskip{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:7;font:26px var(--fut);letter-spacing:.12em;color:#fff;text-shadow:0 3px 0 #000;text-align:center;padding:20px}
+#timeskip[hidden]{display:none}
+#timeskip.go{animation:tsk 1.5s ease forwards}
+@keyframes tsk{0%{background:rgba(5,8,18,0);opacity:0}15%{background:rgba(5,8,18,.7);opacity:1}80%{background:rgba(5,8,18,.7);opacity:1}100%{background:rgba(5,8,18,0);opacity:0}}
+.float.time{border-color:var(--am);color:#ffe9b0}
+.tag.actor.pend{border-color:rgba(245,200,76,.8)}.tag.actor.pend span{color:var(--am)}
+.tag.actor.npc{border-style:dashed;border-color:rgba(100,224,240,.6)}
+.tag.zonetag.bad{border-color:rgba(255,107,107,.6)}
+.tag.exit{display:grid;gap:1px;padding:3px 8px;border-radius:6px;background:rgba(14,18,32,.88);border:2px solid var(--am)}.tag.exit b{font:12px var(--fut);font-weight:400;letter-spacing:.06em;color:var(--am)}.tag.exit span{font-size:12.5px;color:var(--muted)}
+.tag.exit.locked{border-color:var(--line)}.tag.exit.locked b{color:var(--muted)}
+.res.pend{color:var(--am);border-color:rgba(245,200,76,.6)}
+.ced .cgrid{display:grid;grid-template-columns:190px 1fr;gap:12px}
+.seg.wide{width:100%}
+.note{margin:4px 0 0;font-size:12.5px;color:var(--muted)}
+.rulebuilder{display:grid;gap:6px}
+.clause{display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:#121729;border:1px solid var(--line);border-radius:7px;padding:6px}
+.clause.hl{outline:2px dashed var(--am);outline-offset:2px}
+.clause .row{margin:0}.clause select,.fldrow select{background:#0e1222;border:1px solid var(--line);border-radius:6px;padding:5px 6px;color:var(--ink);font:13px ui-monospace,monospace}
+.cl0{font:13px var(--px);color:var(--cy);padding:0 6px}
+.rulecode{margin:8px 0 0;white-space:pre-wrap;word-break:break-word;background:#0b0f1d;border:1px solid var(--line);border-radius:6px;padding:8px;font:12.5px ui-monospace,monospace;color:#bfe9f6}
+.fldrow{display:grid;gap:3px}
+.mlist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.mlist li{display:flex;gap:12px;align-items:center;background:var(--win2);border:2px solid var(--line);border-radius:6px;padding:8px 10px}
+.mlist li.cur{border-color:var(--am)}
+.msign{width:80px;height:28px;image-rendering:pixelated;flex:none}
+.mm{display:grid;flex:1;min-width:0}.mcode{font:11px var(--fut);letter-spacing:.1em;color:var(--cy)}.mm b{font-size:15px}
+.mr{display:grid;gap:6px;justify-items:end}.mk{font:14px var(--px);color:var(--muted)}.mk.ok{color:var(--gr)}
+.mlist.done li{background:transparent;border:0;padding:2px 0}
+code{font:12.5px ui-monospace,monospace;color:#bfe9f6}
+@media (max-width:640px){.ced .cgrid{grid-template-columns:1fr}.msign{display:none}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -160,13 +203,15 @@ details.more,#panel details{margin-top:8px;font-size:14px}#panel summary{cursor:
 <div id="game" tabindex="-1" aria-label="Identity Defender game world"></div>
 <div id="ui">
   <details id="hud-tl" class="hud">
-    <summary><div style="flex:1"><div class="obj-k">Objective <span id="hud-level">Guided</span></div><p class="obj">Restore employee access and stop the suspicious sign-in.</p><div class="dots"><span id="req-dots"></span><span id="req-count"></span><span class="more-r">Requirements ▾</span></div></div></summary>
+    <summary><div style="flex:1"><div class="obj-k"><span id="hud-code">MISSION</span><span id="hud-level">Guided</span></div><p class="obj" id="hud-obj"></p><div class="dots"><span id="req-dots"></span><span id="req-count"></span><span class="more-r">Requirements ▾</span></div></div></summary>
     <ul id="reqs" aria-label="Requirements"></ul>
   </details>
   <div id="hud-tr" class="hud"><span id="hud-tests"></span><span id="hud-xp"></span>
     <button class="btn small" id="btn-hint" onclick="UI.hint()" title="Hint (H)">Hint</button>
-    <button class="btn small" onclick="UI.openLog()" title="Sign-in logs (L)">Logs</button>
-    <button class="btn small" data-ui="menu" title="Menu (Esc)">☰ Menu</button></div>
+    <button class="btn small" id="btn-log" onclick="UI.openLog()" title="Records (L)">Logs</button>
+    <button class="btn small" onclick="UI.openMissions()" title="Missions (M)">Missions</button>
+    <button class="btn small" data-ui="menu" title="Menu (Esc)">☰</button></div>
+  <div id="areasign" aria-live="polite"><b></b><span></span></div>
   <div id="tags" aria-hidden="true"></div>
   <button id="prompt" hidden onclick="window.__ID_GAME && window.__ID_GAME.interact()"><kbd>E</kbd><span class="pt"></span></button>
   <div id="marker" hidden aria-hidden="true">▼</div>
@@ -175,6 +220,7 @@ details.more,#panel details{margin-top:8px;font-size:14px}#panel summary{cursor:
   <div id="panel" hidden></div>
   <div id="predict" hidden></div>
   <div id="banner" hidden></div>
+  <div id="timeskip" hidden aria-live="polite"></div>
   <div id="toasts" aria-live="polite"></div>
   <div id="touch" hidden><div id="tpad" aria-label="Movement pad"><div class="knob"></div></div><button id="tact" aria-label="Interact">Use</button></div>
   <p id="live" class="sr-only" aria-live="polite"></p>
@@ -183,11 +229,17 @@ details.more,#panel details{margin-top:8px;font-size:14px}#panel summary{cursor:
 <noscript><p style="padding:20px">This game needs JavaScript. The <a href="library.html">study library</a> also needs JavaScript.</p></noscript>
 <script src="vendor/phaser.min.js?v=3.90.0"></script>
 <script>window.ID_CONTENT = window.ID_CONTENT || { items:{} };</script>
-<script src="js/lab-missions.js?v=3.0.0"></script>
-<script src="js/ca-engine.js?v=3.0.0"></script>
-<script src="js/progress.js?v=3.0.0"></script>
-<script src="js/ui.js?v=3.0.0"></script>
-<script src="js/main.js?v=3.0.0"></script>
+<script src="js/lab-missions.js?v=3.1.0"></script>
+<script src="js/ca-engine.js?v=3.1.0"></script>
+<script src="js/levels/registry.js?v=3.1.0"></script>
+<script src="js/levels/newhire.js?v=3.1.0"></script>
+<script src="js/levels/gates.js?v=3.1.0"></script>
+<script src="js/levels/consent.js?v=3.1.0"></script>
+<script src="js/levels/pim.js?v=3.1.0"></script>
+<script src="js/levels/review.js?v=3.1.0"></script>
+<script src="js/progress.js?v=3.1.0"></script>
+<script src="js/ui.js?v=3.1.0"></script>
+<script src="js/main.js?v=3.1.0"></script>
 <script>
   window.IDGame.start();
   (function hide(){ const L = document.getElementById("loading"); const t = setInterval(() => { if (window.__ID_GAME && window.__ID_GAME.ready){ clearInterval(t); L.style.opacity = 0; setTimeout(() => L.remove(), 450); } }, 100); })();

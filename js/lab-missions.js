@@ -133,4 +133,4 @@ window.ID_LAB = {
   const objs = ["2.2.2","2.2.3","2.2.4"];
   [1,2,3].forEach(l => { C.items["lab-mml-solve-"+l] = { lab:true, kind:"Ops mission", type:"lab", title:"Monday Morning Lockout ("+["","Guided","Standard","Advanced"][l]+")", obj:objs, difficulty:l, hints:["—"], exp:"—", sit:"—", src:["caOverview"] }; });
   ["lena","omar","spray"].forEach((p, i) => { C.items["lab-mml-predict-"+p] = { lab:true, kind:"Prediction", type:"lab", title:"Predict the gate: "+p, obj:["2.2.4","2.2.3"], difficulty:2, hints:["—"], exp:"—", sit:"—", src:["caOverview"] }; });
-})(window.ID_CONTENT);
+})(window.ID_CONTENT || (window.ID_CONTENT = { items:{} }));
